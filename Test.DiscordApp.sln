@@ -1,0 +1,28 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.DiscordApp.Application", "Test.DiscordApp.Application\Test.DiscordApp.Application.csproj", "{D353D322-3BD1-4632-AAED-B0B044BD1548}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.DiscordApp.Domain", "Test.DiscordApp.Domain\Test.DiscordApp.Domain.csproj", "{2A8F48EE-4917-4F78-9B12-81BC19E7FB25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.DiscordApp.Infrastructure", "Test.DiscordApp.Infrastructure\Test.DiscordApp.Infrastructure.csproj", "{3F70C331-EC16-441D-B778-D206BA7F628F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D353D322-3BD1-4632-AAED-B0B044BD1548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D353D322-3BD1-4632-AAED-B0B044BD1548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D353D322-3BD1-4632-AAED-B0B044BD1548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D353D322-3BD1-4632-AAED-B0B044BD1548}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A8F48EE-4917-4F78-9B12-81BC19E7FB25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A8F48EE-4917-4F78-9B12-81BC19E7FB25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A8F48EE-4917-4F78-9B12-81BC19E7FB25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A8F48EE-4917-4F78-9B12-81BC19E7FB25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F70C331-EC16-441D-B778-D206BA7F628F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F70C331-EC16-441D-B778-D206BA7F628F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F70C331-EC16-441D-B778-D206BA7F628F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F70C331-EC16-441D-B778-D206BA7F628F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
