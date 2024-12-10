@@ -38,4 +38,4 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
-src/Order.Create.Worker/internal-nlog.txt
+secrets.json
