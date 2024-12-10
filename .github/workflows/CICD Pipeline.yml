@@ -7,8 +7,7 @@ on:
     branches: [ main, staging, develop ]
 
 jobs:
-  build:
-
+  Full-CI-Pipeline:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,3 +26,14 @@ jobs:
       
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+    - name: Scan code quality
+      uses: rcowsill/workflow-scan-action@v3.0.0
+
+    - name: Notify Discord through Webhook
+      run: |
+        curl -v \
+        -H "Content-Type: application/json" \
+        -X POST \
+        -d '{"content":"Deployment to '${{ github.ref }}' was successful. Image: my-app:'${{ github.sha }}'"}' \
+        ${{ secrets.DISCORD_WEBHOOK_URL }}
