@@ -1,36 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>87bd0a33-a064-453a-ad27-d1103afc9e0c</UserSecretsId>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="DSharpPlus" Version="5.0.0-nightly-02405" />
-        <PackageReference Include="DSharpPlus.Commands" Version="5.0.0-nightly-02405" />
-        <PackageReference Include="DSharpPlus.CommandsNext" Version="5.0.0-nightly-02405" />
-        <PackageReference Include="DSharpPlus.Interactivity" Version="5.0.0-nightly-02405" />
-        <PackageReference Include="DSharpPlus.Lavalink" Version="5.0.0-nightly-02405" />
-        <PackageReference Include="DSharpPlus.Rest" Version="5.0.0-nightly-02405" />
-        <PackageReference Include="DSharpPlus.SlashCommands" Version="5.0.0-nightly-02405" />
-        <PackageReference Include="DSharpPlus.VoiceNext" Version="5.0.0-nightly-02405" />
-        <PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Test.DiscordApp.Domain\Test.DiscordApp.Domain.csproj" />
-      <ProjectReference Include="..\Test.DiscordApp.Infrastructure\Test.DiscordApp.Infrastructure.csproj" />
+      <PackageReference Include="FluentValidation" Version="11.11.0" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+      <PackageReference Include="MediatR" Version="12.4.1" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
     </ItemGroup>
 
 </Project>

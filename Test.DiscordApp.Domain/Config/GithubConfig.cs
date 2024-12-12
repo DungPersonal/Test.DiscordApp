@@ -1,9 +1,9 @@
 namespace Test.DiscordApp.Domain.Config;
 
-public class GithubConfig
+public record GithubConfig
 {
-    public string User { get; set; } = null!;
-    public string RepositoryName { get; set; } = null!;
-    public string DefaultBranch { get; set; } = null!;
-    public string Token { get; set; } = null!;
+    public string User { get; init; } = null!;
+    public string RepositoryName { get; init; } = null!;
+    public string DefaultBranch { get; init; } = null!;
+    public string Token { get; init; } = null!;
 }

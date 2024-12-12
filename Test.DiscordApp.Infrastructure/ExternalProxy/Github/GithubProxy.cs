@@ -2,7 +2,7 @@ using Microsoft.Extensions.Options;
 using Test.DiscordApp.Domain.Config;
 using Test.DiscordApp.Domain.Proxy.Github.Response;
 using Test.DiscordApp.Infrastructure.ExternalProxy.Base;
-using Test.DiscordApp.Domain.Utility;
+using Test.DiscordApp.Utility.Extensions;
 
 namespace Test.DiscordApp.Infrastructure.ExternalProxy.Github;
 

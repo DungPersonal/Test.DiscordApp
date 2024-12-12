@@ -7,13 +7,26 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="DSharpPlus" Version="5.0.0-nightly-02405" />
+        <PackageReference Include="DSharpPlus.Commands" Version="5.0.0-nightly-02405" />
+        <PackageReference Include="DSharpPlus.CommandsNext" Version="5.0.0-nightly-02405" />
+        <PackageReference Include="DSharpPlus.Interactivity" Version="5.0.0-nightly-02405" />
+        <PackageReference Include="DSharpPlus.Lavalink" Version="5.0.0-nightly-02405" />
+        <PackageReference Include="DSharpPlus.Rest" Version="5.0.0-nightly-02405" />
+        <PackageReference Include="DSharpPlus.SlashCommands" Version="5.0.0-nightly-02405" />
+        <PackageReference Include="DSharpPlus.VoiceNext" Version="5.0.0-nightly-02405" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Test.DiscordApp.Domain\Test.DiscordApp.Domain.csproj" />
+      <ProjectReference Include="..\Shared.Utility\Shared.Utility.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,8 +1,9 @@
 using DSharpPlus.Commands;
+using Test.DiscordApp.Domain.Interface;
 
-namespace Test.DiscordApp.Application.Command;
+namespace Test.DiscordApp.Infrastructure.Discord.Command;
 
-public class PingCommand
+public class PingCommand: IDiscordCommand
 {
     [Command("ping")]
     public static async ValueTask ExecuteAsync(CommandContext context) =>

@@ -1,7 +1,7 @@
 using DSharpPlus;
 using DSharpPlus.EventArgs;
 
-namespace Test.DiscordApp.Application.EventHandler;
+namespace Test.DiscordApp.Infrastructure.Discord.EventHandler;
 
 public class MessageCreatedEventHandler: IEventHandler<MessageCreatedEventArgs>
 {

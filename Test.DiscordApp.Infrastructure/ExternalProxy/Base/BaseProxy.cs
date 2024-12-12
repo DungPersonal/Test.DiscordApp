@@ -1,4 +1,4 @@
-using Test.DiscordApp.Domain.Utility;
+using Test.DiscordApp.Utility.Extensions;
 
 namespace Test.DiscordApp.Infrastructure.ExternalProxy.Base;
 
