@@ -26,7 +26,7 @@ public static class Program
     private static void ConfigureBuilder(WebApplicationBuilder builder)
     {
         #region Configure settings
-        
+
         builder.Configuration
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddUserSecrets(typeof(Program).Assembly, optional: false)
@@ -35,7 +35,7 @@ public static class Program
             .Configure<DiscordConfig>(builder.Configuration.GetSection("Discord"))
             .Configure<GithubConfig>(builder.Configuration.GetSection("Github"))
             .AddSingleton(TimeProvider.System);
-        
+
         #endregion
 
         #region Configure project specific services
@@ -45,18 +45,23 @@ public static class Program
             .AddApplication();
         builder.Host.ConfigureDiscordClient(builder.Configuration);
 
-        #endregion 
-        
+        #endregion
+
         #region Configure gRPC
-        
+
         builder.Services
+            .AddCors(c => c.AddPolicy("AllowAllOrigins", b => b
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+            ))
             .AddGrpc()
             .AddJsonTranscoding();
 
         #endregion
-        
+
         #region Configure Swagger
-        
+
         builder.Services
             .AddGrpcSwagger()
             .AddSwaggerGen(c =>
@@ -66,7 +71,7 @@ public static class Program
                 // c.IncludeXmlComments(filePath);
                 // c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
             });
-        
+
         #endregion
 
         builder.Host
@@ -86,16 +91,14 @@ public static class Program
             });
         }
 
-        app.UseGrpcWeb();
+        app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
+        app.UseCors("AllowAllOrigins"); 
         app.MapGrpcService<GreeterService>();
         app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client.");
     }
 
     private static void AddSerilog(this ConfigureHostBuilder host)
     {
-        host.UseSerilog((context, configuration) =>
-        {
-            configuration.ReadFrom.Configuration(context.Configuration);
-        });
+        host.UseSerilog((context, configuration) => { configuration.ReadFrom.Configuration(context.Configuration); });
     }
 }
