@@ -1,6 +1,8 @@
 using CorrelationId.DependencyInjection;
+using Google.Api;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Serilog.Context;
 using Test.DiscordApp.Application;
 using Test.DiscordApp.gRPC.Services;
 using Test.DiscordApp.Domain.Config;
@@ -30,7 +32,7 @@ public static class Program
         #region Configure settings
 
         builder.Configuration
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("Config/appsettings.json", optional: false, reloadOnChange: true)
             .AddJsonFile("Config/logging.json", optional: false, reloadOnChange: true)
             .AddUserSecrets(typeof(Program).Assembly, optional: false)
             .AddEnvironmentVariables();
@@ -48,7 +50,7 @@ public static class Program
             options.LoggingScopeKey = "CorrelationId";
             options.RequestHeader = "X-Correlation-Id";
             options.ResponseHeader = "X-Correlation-Id";
-            options.UpdateTraceIdentifier = false;
+            options.UpdateTraceIdentifier = true;
         });
 
         #endregion
@@ -109,7 +111,7 @@ public static class Program
                 c.RoutePrefix = string.Empty; // Automatically open Swagger at the root
             });
         }
-        app.UseCors("AllowAllOrigins"); 
+        app.UseCors("AllowAllOrigins");
         app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
         app.MapGrpcService<GreeterService>();
         app.MapGrpcService<GithubService>();

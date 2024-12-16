@@ -1,4 +1,5 @@
 using Grpc.Core;
+using Serilog.Context;
 
 namespace Test.DiscordApp.gRPC.Services;
 
