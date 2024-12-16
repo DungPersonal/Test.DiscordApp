@@ -3,7 +3,8 @@
     "Using": [
       "Serilog.Sinks.Console",
       "Elastic.Serilog.Sinks",
-      "Serilog.Sinks.Async"
+      "Serilog.Sinks.Async",
+      "Serilog.Enrichers.ClientInfo"
     ],
     "MinimumLevel": {
       "Default": "Information",
@@ -20,7 +21,7 @@
             {
               "Name": "Console",
               "Args": {
-                "outputTemplate": "[{TimeStamp:yyyy-MM-dd HH:mm:ss.fff} zzz {Level:u3}] {Message:lj}{NewLine}{Exception}{StackTrace}",
+                "outputTemplate": "[{CorrelationId}] [{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}]: {Message:lj}{NewLine}{Exception}{StackTrace}",
                 "theme": "Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme::Code, Serilog.Sinks.Console"
               }
             },
@@ -31,7 +32,7 @@
                 "indexFormat": "logstash-{0:yyyy.MM.dd}",
                 "autoRegisterTemplate": true,
                 "inlineFields": true,
-                "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}{StackTrace}",
+                "outputTemplate": "[{CorrelationId}] [{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] [{Level:u3}]: {Message:lj}{NewLine}{Exception}{StackTrace}",
                 "restrictedToMinimumLevel": "Information"
               }
             }
@@ -39,26 +40,17 @@
         }
       }
     },
-    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ]
-  },
-  "AllowedHosts": "*",
-  "Kestrel": {
-    "EndpointDefaults": {
-      "Protocols": "Http2"
-    }
-  },
-  "Discord": {
-    "Prefix": "!",
-    "AllowMention": true,
-    "Token": "",
-    "ChannelId": ""
-  },
-  "Github": {
-    "User": "Nguyenhoangdung335",
-    "RepositoryName": "Test.DiscordApp",
-    "DefaultBranch": "main"
-  },
-  "ConnectionStrings": {
-    "Github": "https://api.github.com"
+    "Enrich": [
+      "FromLogContext",
+      "WithMachineName",
+      "WithThreadId",
+      {
+        "Name": "WithCorrelationId",
+        "Args": {
+          "headerName": "X-Correlation-Id",
+          "addValueIfHeaderAbsence": true
+        }
+      }
+    ]
   }
 }

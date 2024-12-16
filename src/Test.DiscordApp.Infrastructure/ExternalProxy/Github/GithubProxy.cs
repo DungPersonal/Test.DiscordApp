@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Test.DiscordApp.Domain.Config;
 using Test.DiscordApp.Domain.Proxy.Github.Response;
@@ -9,7 +10,8 @@ namespace Test.DiscordApp.Infrastructure.ExternalProxy.Github;
 public class GithubProxy(
     IHttpClientFactory httpClientFactory,
     IOptions<GithubConfig> githubConfig,
-    IBaseProxy baseProxy
+    IBaseProxy baseProxy,
+    ILogger<GithubProxy> logger
 ) : IGithubProxy
 {
     private HttpClient HttpClient => httpClientFactory.CreateClient(nameof(GithubProxy));

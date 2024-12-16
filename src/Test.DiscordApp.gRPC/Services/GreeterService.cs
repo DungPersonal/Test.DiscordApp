@@ -1,6 +1,6 @@
 using Grpc.Core;
 
-namespace Test.DiscordApp.Application.Services;
+namespace Test.DiscordApp.gRPC.Services;
 
 public class GreeterService : Greeter.GreeterBase
 {

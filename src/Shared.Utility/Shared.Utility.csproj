@@ -7,4 +7,12 @@
         <RootNamespace>Test.DiscordApp.Utility</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="MediatR\Command\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="9.0.0" />
+    </ItemGroup>
+
 </Project>

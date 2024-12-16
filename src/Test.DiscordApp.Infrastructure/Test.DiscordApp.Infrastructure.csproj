@@ -15,6 +15,7 @@
         <PackageReference Include="DSharpPlus.Rest" Version="5.0.0-nightly-02428" />
         <PackageReference Include="DSharpPlus.SlashCommands" Version="5.0.0-nightly-02428" />
         <PackageReference Include="DSharpPlus.VoiceNext" Version="5.0.0-nightly-02428" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.0" />
     </ItemGroup>
     
     <ItemGroup>

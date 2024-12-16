@@ -6,4 +6,5 @@ public record GithubConfig
     public string RepositoryName { get; init; } = null!;
     public string DefaultBranch { get; init; } = null!;
     public string Token { get; init; } = null!;
+    public string ApiVersion { get; init; } = null!;
 }

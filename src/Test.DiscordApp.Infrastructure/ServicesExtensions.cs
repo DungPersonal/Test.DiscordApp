@@ -45,9 +45,10 @@ public static class ServicesExtensions
             client =>
             {
                 client.BaseAddress = new Uri(connectionConfig.Github);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", githubConfig.Token);
+                client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", githubConfig.ApiVersion);
             }
         );
     }

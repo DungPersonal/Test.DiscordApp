@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Test.DiscordApp.Application";
+option csharp_namespace = "Test.DiscordApp.gRPC";
 
 package greet;
 

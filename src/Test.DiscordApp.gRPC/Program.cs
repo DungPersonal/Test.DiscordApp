@@ -1,10 +1,12 @@
+using CorrelationId.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Test.DiscordApp.Application.Services;
+using Test.DiscordApp.Application;
+using Test.DiscordApp.gRPC.Services;
 using Test.DiscordApp.Domain.Config;
 using Test.DiscordApp.Infrastructure;
 
-namespace Test.DiscordApp.Application;
+namespace Test.DiscordApp.gRPC;
 
 public static class Program
 {
@@ -29,12 +31,32 @@ public static class Program
 
         builder.Configuration
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("Config/logging.json", optional: false, reloadOnChange: true)
             .AddUserSecrets(typeof(Program).Assembly, optional: false)
             .AddEnvironmentVariables();
         builder.Services
             .Configure<DiscordConfig>(builder.Configuration.GetSection("Discord"))
             .Configure<GithubConfig>(builder.Configuration.GetSection("Github"))
             .AddSingleton(TimeProvider.System);
+        builder.Services.AddDefaultCorrelationId(options =>
+        {
+            options.CorrelationIdGenerator = () => Guid.NewGuid().ToString("N");
+            options.AddToLoggingScope = true;
+            options.EnforceHeader = false;
+            options.IgnoreRequestHeader = false;
+            options.IncludeInResponse = true;
+            options.LoggingScopeKey = "CorrelationId";
+            options.RequestHeader = "X-Correlation-Id";
+            options.ResponseHeader = "X-Correlation-Id";
+            options.UpdateTraceIdentifier = false;
+        });
+
+        #endregion
+
+        #region Configure Logging setting
+
+        builder.Logging.ClearProviders();
+        builder.Host.AddSerilog();
 
         #endregion
 
@@ -73,9 +95,6 @@ public static class Program
             });
 
         #endregion
-
-        builder.Host
-            .AddSerilog();
     }
 
     private static void ConfigureApp(WebApplication app)
@@ -90,15 +109,18 @@ public static class Program
                 c.RoutePrefix = string.Empty; // Automatically open Swagger at the root
             });
         }
-
-        app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
         app.UseCors("AllowAllOrigins"); 
+        app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
         app.MapGrpcService<GreeterService>();
+        app.MapGrpcService<GithubService>();
         app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client.");
     }
 
     private static void AddSerilog(this ConfigureHostBuilder host)
     {
-        host.UseSerilog((context, configuration) => { configuration.ReadFrom.Configuration(context.Configuration); });
+        host.UseSerilog((context, configuration) =>
+        {
+            configuration.ReadFrom.Configuration(context.Configuration);
+        });
     }
 }

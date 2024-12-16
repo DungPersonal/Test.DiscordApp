@@ -5,15 +5,16 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>87bd0a33-a064-453a-ad27-d1103afc9e0c</UserSecretsId>
-        <RootNamespace>Test.DiscordApp.Application</RootNamespace>
+        <RootNamespace>Test.DiscordApp.gRPC</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
         <Protobuf Include="Protos\greet.proto" GrpcServices="Server" AdditionalImportDirs="$(NuGetPackageRoot)google.api.commonprotos\2.16.0\content\protos"/>
+        <Protobuf Include="Protos\github.proto" GrpcServices="Server" AdditionalImportDirs="$(NuGetPackageRoot)google.api.commonprotos\2.16.0\content\protos"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Carter" Version="9.0.0" />
+        <PackageReference Include="CorrelationId" Version="3.0.1" />
         <PackageReference Include="Elastic.Serilog.Sinks" Version="8.12.3" />
         <PackageReference Include="Google.Api.CommonProtos" Version="2.16.0" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.67.0" />
@@ -28,11 +29,13 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+        <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="2.1.2" />
         <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Shared.Protos\Shared.Protos.csproj" />
       <ProjectReference Include="..\Test.DiscordApp.Application\Test.DiscordApp.Application.csproj" />
       <ProjectReference Include="..\Test.DiscordApp.Domain\Test.DiscordApp.Domain.csproj" />
       <ProjectReference Include="..\Test.DiscordApp.Infrastructure\Test.DiscordApp.Infrastructure.csproj" />
