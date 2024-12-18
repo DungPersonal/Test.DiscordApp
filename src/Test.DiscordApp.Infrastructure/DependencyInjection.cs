@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using CorrelationId.Abstractions;
 using DSharpPlus;
 using DSharpPlus.Commands;
 using DSharpPlus.Commands.Processors.TextCommands;
@@ -15,7 +16,7 @@ using Test.DiscordApp.Infrastructure.ExternalProxy.Github;
 
 namespace Test.DiscordApp.Infrastructure;
 
-public static class ServicesExtensions
+public static class DependencyInjection
 {
     public static IHostApplicationBuilder AddInfrastructureServices(this IHostApplicationBuilder builder,
         IConfiguration configuration)
@@ -37,7 +38,14 @@ public static class ServicesExtensions
         GithubConfig githubConfig)
     {
         // Configure Default HttpClient for every proxy
-        services.AddHttpClient();
+        var correlationContextAccessor = services.BuildServiceProvider().GetService<ICorrelationContextAccessor>();
+        services.AddHttpClient(Microsoft.Extensions.Options.Options.DefaultName, client =>
+        {
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            if (correlationContextAccessor is not null)
+                client.DefaultRequestHeaders.Add(correlationContextAccessor.CorrelationContext.Header,
+                    correlationContextAccessor.CorrelationContext.CorrelationId);
+        });
 
         // Configure Default HttpClient for GithubProxy
         services.AddHttpClient(
@@ -48,6 +56,9 @@ public static class ServicesExtensions
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", githubConfig.Token);
+                client.DefaultRequestHeaders.Connection.Add("keep-alive");
+                client.DefaultRequestHeaders.Host = "api.github.com";
+                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Test.DiscordApp", "1.0"));
                 client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", githubConfig.ApiVersion);
             }
         );
@@ -90,7 +101,7 @@ public static class ServicesExtensions
         builder.UseCommands((_, extension) =>
         {
             // Add all command types from the current assembly
-            var currAssembly = typeof(ServicesExtensions).Assembly;
+            var currAssembly = typeof(DependencyInjection).Assembly;
             var commandTypes = currAssembly.GetTypes()
                 .Where(t => typeof(IDiscordCommand).IsAssignableFrom(t) && t is { IsClass: true, IsAbstract: false })
                 .ToArray();

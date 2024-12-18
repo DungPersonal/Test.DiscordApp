@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Test.DiscordApp.Utility.Extensions;
+namespace SharedKernel.Utility.Extensions;
 
 public static class StringExtensions
 {

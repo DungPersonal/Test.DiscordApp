@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="CorrelationId" Version="3.0.1" />
         <PackageReference Include="DSharpPlus" Version="5.0.0-nightly-02428" />
         <PackageReference Include="DSharpPlus.Commands" Version="5.0.0-nightly-02428" />
         <PackageReference Include="DSharpPlus.CommandsNext" Version="5.0.0-nightly-02428" />
@@ -27,7 +28,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Test.DiscordApp.Domain\Test.DiscordApp.Domain.csproj" />
-      <ProjectReference Include="..\Shared.Utility\Shared.Utility.csproj" />
+      <ProjectReference Include="..\SharedKernel.Utility\SharedKernel.Utility.csproj" />
     </ItemGroup>
 
 </Project>

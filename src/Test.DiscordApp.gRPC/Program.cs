@@ -1,8 +1,7 @@
+using CorrelationId;
 using CorrelationId.DependencyInjection;
-using Google.Api;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Serilog.Context;
 using Test.DiscordApp.Application;
 using Test.DiscordApp.gRPC.Services;
 using Test.DiscordApp.Domain.Config;
@@ -91,9 +90,9 @@ public static class Program
             .AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "gRPC transcoding", Version = "v1" });
-                // var filePath = Path.Combine(AppContext.BaseDirectory, "Server.xml");
-                // c.IncludeXmlComments(filePath);
-                // c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
+                var filePath = Path.Combine(AppContext.BaseDirectory, "Server.xml");
+                c.IncludeXmlComments(filePath);
+                c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
             });
 
         #endregion
@@ -111,11 +110,12 @@ public static class Program
                 c.RoutePrefix = string.Empty; // Automatically open Swagger at the root
             });
         }
+        app.UseCorrelationId();
         app.UseCors("AllowAllOrigins");
         app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
-        app.MapGrpcService<GreeterService>();
         app.MapGrpcService<GithubService>();
         app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client.");
+        app.UseSerilogRequestLogging();
     }
 
     private static void AddSerilog(this ConfigureHostBuilder host)

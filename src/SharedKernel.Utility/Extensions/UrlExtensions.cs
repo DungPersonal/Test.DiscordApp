@@ -1,23 +1,24 @@
 using System.Collections;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Test.DiscordApp.Utility.Function;
+namespace SharedKernel.Utility.Extensions;
 
-public static class UrlUtility
+public static class UrlExtensions
 {
-    public static string UrlBuilder(this string baseUrl, params (string Key, object? Value)[] queryParam)
+    public static Uri AddUrlQueryParam(this Uri baseUrl, params (string Key, object? Value)[] queryParam)
     {
+        
         var filteredParams = queryParam
-            .Where(pair => !string.IsNullOrWhiteSpace(pair.Key) 
-                           && pair.Value is not null 
+            .Where(pair => !string.IsNullOrWhiteSpace(pair.Key)
+                           && pair.Value is not null
                            && !string.IsNullOrWhiteSpace(pair.Value?.ToString()))
             .ToDictionary(pair => pair.Key, pair => pair.Value.ConvertObjectToString());
 
-        var urlWithQuery = QueryHelpers.AddQueryString(baseUrl, filteredParams);
+        var urlWithQuery = QueryHelpers.AddQueryString(baseUrl.ToString(), filteredParams);
 
-        return urlWithQuery;
+        return ToUri(urlWithQuery);
     }
-    
+
     public static string? ConvertObjectToString(this object? value)
     {
         return value switch {
@@ -28,4 +29,6 @@ public static class UrlUtility
             _ => value.ToString() ?? string.Empty
         };
     }
+    
+    public static Uri ToUri(this string? str) => new(str ?? string.Empty);
 }

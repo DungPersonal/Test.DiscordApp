@@ -1,24 +1,45 @@
-using Test.DiscordApp.Utility.Extensions;
+using Microsoft.Extensions.Logging;
+using SharedKernel.Utility.Extensions;
 
 namespace Test.DiscordApp.Infrastructure.ExternalProxy.Base;
 
-public class BaseProxy: IBaseProxy
+public class BaseProxy(
+    ILogger<BaseProxy> logger
+): IBaseProxy
 {
-    public async Task<T?> GetAsync<T>(HttpClient httpClient, string url, Dictionary<string, string>? headers = null,
-        string trackId = "", CancellationToken cancellationToken = default)
+    public async Task<T?> GetAsync<T>(
+        HttpClient httpClient, string url, Dictionary<string, string>? headers = null,
+        bool isJsonSnakeCase = false, CancellationToken cancellationToken = default)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, url);
-        if (headers != null)
+        try
         {
-            foreach (var header in headers)
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            if (headers != null)
             {
-                request.Headers.Add(header.Key, header.Value);
+                foreach (var header in headers)
+                {
+                    request.Headers.Add(header.Key, header.Value);
+                }
             }
-        }
+            var response = await httpClient.SendAsync(request, cancellationToken);
+            logger.LogInformation("GET {URL} - {STATUSCODE}", url, response.StatusCode);
+            if (!response.IsSuccessStatusCode)
+            {
+                return default;
+            }
 
-        var response = await httpClient.SendAsync(request, cancellationToken);
-        response.EnsureSuccessStatusCode();
-        var responseString = await response.Content.ReadAsStringAsync(cancellationToken);
-        return responseString.FromJson<T>();
+            var responseString = await response.Content.ReadAsStringAsync(cancellationToken);
+            return responseString.FromJson<T>(isJsonSnakeCase);
+        }
+        catch (OperationCanceledException ex)
+        {
+            logger.LogWarning(ex,"GET {URL} - OperationCanceled {EXCEPTION}", url, ex.Message);
+            return default;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "GET {URL} - Failed to get response", url);
+            return default;
+        }
     }
 }

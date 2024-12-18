@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option csharp_namespace = "Shared.Protos";
+
+package Github;
+
+import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+
+service GitHub {
+  rpc GetRepo (GetRepoRequest) returns (GetRepoReply) {
+    option (google.api.http) = {
+      get: "/github/repos/{owner}/{repo}/{ref}",
+    };
+  };
+}
+
+message GetRepoRequest {
+  string owner = 1;
+  string repo = 2;
+  google.protobuf.StringValue branch = 3;
+  google.protobuf.StringValue ref = 4;
+}
+
+message GetRepoReply {
+  string sha = 1;
+  CommitDetails commit = 2;
+  string url = 3;
+  string htmlUrl = 4;
+}
+
+message CommitDetails {
+  CommitAuthor author = 1;
+  string message = 2;
+  string url = 3;
+}
+
+message CommitAuthor{
+  string name = 1;
+  string email = 2;
+  google.protobuf.Timestamp date = 3;
+}
