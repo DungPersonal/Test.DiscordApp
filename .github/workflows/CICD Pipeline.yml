@@ -45,18 +45,18 @@ jobs:
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
-
-      - name: Notify Discord after Workflow
-        uses: DungPersonal/Test.DevOps/.github/workflows/notify_discord.yml@main
-        with:
-          status: ${{ job.status }}
-          repository: ${{ github.repository }}
-          workflow: ${{ github.workflow }}
-          actor: ${{ github.actor }}
-          event_name: ${{ github.event_name }}
-          ref: ${{ github.ref }}
-          sha: ${{ github.sha }}
-          run_number: ${{ github.run_number }}
-          url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        secrets:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        
+  notify-success:
+    uses: DungPersonal/Test.DevOps/.github/workflows/notify_discord.yml@main
+    with:
+      status: ${{ job.status }}
+      repository: ${{ github.repository }}
+      workflow: ${{ github.workflow }}
+      actor: ${{ github.actor }}
+      event_name: ${{ github.event_name }}
+      ref: ${{ github.ref }}
+      sha: ${{ github.sha }}
+      run_number: ${{ github.run_number }}
+      url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    secrets:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
