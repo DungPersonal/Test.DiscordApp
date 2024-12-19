@@ -45,11 +45,12 @@ jobs:
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
-        
-  notify-success:
+
+  notify-end:
+    needs: Full-CI-Pipeline
     uses: DungPersonal/Test.DevOps/.github/workflows/notify_discord.yml@main
     with:
-      status: ${{ job.status }}
+      status: ${{ needs.Full-CI-Pipeline.result }}
       repository: ${{ github.repository }}
       workflow: ${{ github.workflow }}
       actor: ${{ github.actor }}
