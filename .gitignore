@@ -39,3 +39,5 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 secrets.json
+certs/
+.containers/

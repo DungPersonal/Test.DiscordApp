@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using CorrelationId;
 using CorrelationId.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -6,24 +7,32 @@ using Test.DiscordApp.Application;
 using Test.DiscordApp.gRPC.Services;
 using Test.DiscordApp.Domain.Config;
 using Test.DiscordApp.Infrastructure;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Test.DiscordApp.gRPC;
 
 public static class Program
 {
+    private static readonly ILogger Logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("Program");
+    
     public static async Task Main(string[] args)
     {
-        var logger = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("Program");
-        logger.LogInformation("Starting TestDiscordApp.Application...");
+        Logger.LogInformation("Starting TestDiscordApp.Application...");
+        try
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-        var builder = WebApplication.CreateBuilder(args);
+            ConfigureBuilder(builder);
 
-        ConfigureBuilder(builder);
+            var app = builder.Build();
+            ConfigureApp(app);
 
-        var app = builder.Build();
-        ConfigureApp(app);
-
-        await app.RunAsync();
+            await app.RunAsync();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "An error occurred while starting the application");
+        }
     }
 
     private static void ConfigureBuilder(WebApplicationBuilder builder)
@@ -64,9 +73,9 @@ public static class Program
         #region Configure project specific services
 
         builder
-            .AddInfrastructureServices(builder.Configuration)
+            .AddInfrastructureServices(builder.Configuration, Logger)
             .AddApplication();
-        builder.Host.ConfigureDiscordClient(builder.Configuration);
+        builder.Host.ConfigureDiscordClient(builder.Configuration, Logger);
 
         #endregion
 
@@ -90,9 +99,9 @@ public static class Program
             .AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "gRPC transcoding", Version = "v1" });
-                var filePath = Path.Combine(AppContext.BaseDirectory, "Server.xml");
-                c.IncludeXmlComments(filePath);
-                c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
+                // var filePath = Path.Combine(AppContext.BaseDirectory, "Server.xml");
+                // c.IncludeXmlComments(filePath);
+                // c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
             });
 
         #endregion

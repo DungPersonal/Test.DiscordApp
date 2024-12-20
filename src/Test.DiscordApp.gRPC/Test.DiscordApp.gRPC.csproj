@@ -6,6 +6,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>87bd0a33-a064-453a-ad27-d1103afc9e0c</UserSecretsId>
         <RootNamespace>Test.DiscordApp.gRPC</RootNamespace>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..</DockerfileContext>
+        <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,6 +28,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     </ItemGroup>
     
     <ItemGroup>

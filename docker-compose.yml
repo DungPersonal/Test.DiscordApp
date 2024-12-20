@@ -1,0 +1,73 @@
+services:
+  test.discordapp.grpc:
+    image: ${DOCKER_REGISTRY-}testdiscordappgrpc
+    build:
+      context: .
+      dockerfile: src/Test.DiscordApp.gRPC/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - ./certs:/app/certs
+    environment:
+      #Environment variables for SSL certificate paths
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/certs/server.crt
+      - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/app/certs/server.key
+
+  users-db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+        
+#  elasticsearch:
+#    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.1
+#    container_name: elasticsearch
+#    environment:
+#      - discovery.type=single-node
+#      - xpack.security.enabled=false
+#    ports:
+#      - "9200:9200"
+#
+#  logstash:
+#    image: docker.elastic.co/logstash/logstash:8.10.1
+#    container_name: logstash
+#    volumes:
+#      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+#    ports:
+#      - "5044:5044"
+#    depends_on:
+#      - elasticsearch
+#
+#  kibana:
+#    image: docker.elastic.co/kibana/kibana:8.10.1
+#    container_name: kibana
+#    environment:
+#      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+#    ports:
+#      - "5601:5601"
+#    depends_on:
+#      - elasticsearch
+
+#  nginx:
+#    image: nginx:latest
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+#      - ./certbot/www:/var/www/certbot/:ro
+#      - ./certbot/conf/:/etc/nginx/ssl/:ro
+#    depends_on:
+#      - test.discordapp.grpc
+#      - users-db
+#  certbot:
+#    image: certbot/certbot:latest
+#    volumes:
+#      - ./certbot/www/:/var/www/certbot/:rw
+#      - ./certbot/conf/:/etc/letsencrypt/:rw

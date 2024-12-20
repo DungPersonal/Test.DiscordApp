@@ -1,21 +1,24 @@
 <Project>
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
-    <OutputPath>$(BaseOutputPath)$(Configuration)\</OutputPath>
+<!--  <PropertyGroup>-->
+<!--    <TargetFramework>net9.0</TargetFramework>-->
+<!--    <ImplicitUsings>enable</ImplicitUsings>-->
+<!--    <Nullable>enable</Nullable>-->
+<!--    <BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>-->
+<!--    <OutputPath>$(BaseOutputPath)$(Configuration)\</OutputPath>-->
 
-<!--    <AnalysisLevel>latest</AnalysisLevel>-->
-<!--    <AnalysisMode>All</AnalysisMode>-->
-<!--    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
-<!--    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>-->
-<!--    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>-->
-  </PropertyGroup>
-  <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj'">
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="*">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+<!--&lt;!&ndash;    <AnalysisLevel>latest</AnalysisLevel>&ndash;&gt;-->
+<!--&lt;!&ndash;    <AnalysisMode>All</AnalysisMode>&ndash;&gt;-->
+<!--&lt;!&ndash;    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>&ndash;&gt;-->
+<!--&lt;!&ndash;    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>&ndash;&gt;-->
+<!--&lt;!&ndash;    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>&ndash;&gt;-->
+<!--  </PropertyGroup>-->
+<!--  <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj'">-->
+<!--    <PackageReference Include="SonarAnalyzer.CSharp" Version="*">-->
+<!--      <PrivateAssets>all</PrivateAssets>-->
+<!--      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
+<!--    </PackageReference>-->
+<!--  </ItemGroup>-->
+<!--    <PropertyGroup>-->
+<!--        <PublishTrimmed>true</PublishTrimmed>-->    
+<!--    </PropertyGroup>-->
 </Project>

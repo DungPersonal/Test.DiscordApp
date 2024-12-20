@@ -28,7 +28,7 @@
             {
               "Name": "Elasticsearch",
               "Args": {
-                "nodeUris": "http://localhost:9200",
+                "nodeUris": "http://elasticsearch:9200",
                 "indexFormat": "logstash-{0:yyyy.MM.dd}",
                 "autoRegisterTemplate": true,
                 "inlineFields": true,

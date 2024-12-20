@@ -7,19 +7,22 @@ using DSharpPlus.Commands.Processors.TextCommands.Parsing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
+using SharedKernel.Utility.Extensions;
 using Test.DiscordApp.Domain.Config;
 using Test.DiscordApp.Domain.Interface;
 using Test.DiscordApp.Infrastructure.Discord.EventHandler;
 using Test.DiscordApp.Infrastructure.ExternalProxy.Base;
 using Test.DiscordApp.Infrastructure.ExternalProxy.Github;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Test.DiscordApp.Infrastructure;
 
 public static class DependencyInjection
 {
     public static IHostApplicationBuilder AddInfrastructureServices(this IHostApplicationBuilder builder,
-        IConfiguration configuration)
+        IConfiguration configuration, ILogger logger)
     {
         var connectionConfig = configuration.GetSection("ConnectionStrings").Get<ConnectionConfig>();
         var githubConfig = configuration.GetSection("Github").Get<GithubConfig>();
@@ -29,14 +32,15 @@ public static class DependencyInjection
         builder.Services
             .AddSingleton<IBaseProxy, BaseProxy>()
             .AddSingleton<IGithubProxy, GithubProxy>()
-            .AddHttpClient(connectionConfig, githubConfig);
+            .AddHttpClient(connectionConfig, githubConfig, logger);
 
         return builder;
     }
 
     private static void AddHttpClient(this IServiceCollection services, ConnectionConfig connectionConfig,
-        GithubConfig githubConfig)
+        GithubConfig githubConfig, ILogger logger)
     {
+        logger.LogInformation("Configuring Default HttpClients...");
         // Configure Default HttpClient for every proxy
         var correlationContextAccessor = services.BuildServiceProvider().GetService<ICorrelationContextAccessor>();
         services.AddHttpClient(Microsoft.Extensions.Options.Options.DefaultName, client =>
@@ -47,6 +51,7 @@ public static class DependencyInjection
                     correlationContextAccessor.CorrelationContext.CorrelationId);
         });
 
+        logger.LogInformation("Configuring GithubProxy HttpClient...");
         // Configure Default HttpClient for GithubProxy
         services.AddHttpClient(
             nameof(GithubProxy),
@@ -64,7 +69,7 @@ public static class DependencyInjection
         );
     }
 
-    public static void ConfigureDiscordClient(this IHostBuilder builder, IConfiguration configuration)
+    public static void ConfigureDiscordClient(this IHostBuilder builder, IConfiguration configuration, ILogger logger)
     {
         builder.ConfigureServices((_, services) =>
         {
@@ -74,8 +79,8 @@ public static class DependencyInjection
             var discordBuilder = DiscordClientBuilder.CreateDefault(config.Token, DiscordIntents.All);
 
             discordBuilder
-                .AddEventHandlers()
-                .AddCommands(config);
+                .AddEventHandlers(logger)
+                .AddCommands(config, logger);
 
             discordBuilder.ConfigureLogging(c => c.AddSerilog());
 
@@ -90,14 +95,16 @@ public static class DependencyInjection
         });
     }
 
-    private static DiscordClientBuilder AddEventHandlers(this DiscordClientBuilder builder)
+    private static DiscordClientBuilder AddEventHandlers(this DiscordClientBuilder builder, ILogger logger)
     {
+        logger.LogInformation("Configuring Discord Event Handlers...");
         return builder.ConfigureEventHandlers(b =>
             b.AddEventHandlers<MessageCreatedEventHandler>(ServiceLifetime.Singleton));
     }
 
-    private static void AddCommands(this DiscordClientBuilder builder, DiscordConfig config)
+    private static void AddCommands(this DiscordClientBuilder builder, DiscordConfig config, ILogger logger)
     {
+        logger.LogInformation("Configuring Discord Commands...");
         builder.UseCommands((_, extension) =>
         {
             // Add all command types from the current assembly
@@ -105,6 +112,8 @@ public static class DependencyInjection
             var commandTypes = currAssembly.GetTypes()
                 .Where(t => typeof(IDiscordCommand).IsAssignableFrom(t) && t is { IsClass: true, IsAbstract: false })
                 .ToArray();
+            logger.LogInformation("Found {COUNT} command types: [{COMMANDS}]", 
+                commandTypes.Length, commandTypes.Select(t => t.Name).ToJoinString());
             extension.AddCommands(commandTypes);
 
             // Add Prefix resolver

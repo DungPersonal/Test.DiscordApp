@@ -5,7 +5,6 @@ option csharp_namespace = "Shared.Protos";
 package Github;
 
 import "google/api/annotations.proto";
-import "google/protobuf/wrappers.proto";
 import "google/protobuf/timestamp.proto";
 
 service GitHub {
@@ -19,8 +18,8 @@ service GitHub {
 message GetRepoRequest {
   string owner = 1;
   string repo = 2;
-  google.protobuf.StringValue branch = 3;
-  google.protobuf.StringValue ref = 4;
+  string ref = 3;
+  optional string branch = 4;
 }
 
 message GetRepoReply {

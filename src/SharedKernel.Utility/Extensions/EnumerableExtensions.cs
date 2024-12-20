@@ -21,4 +21,14 @@ public static class EnumerableExtensions
     /// <returns></returns>
     public static bool IsNotEmpty<T>([NotNullWhen(true)] this IEnumerable<T>? enumerable) where T : IEnumerable<T> =>
         enumerable is not null && enumerable.Any();
+    
+    /// <summary>
+    /// Converts an Enumerable to a string with a separator.
+    /// </summary>
+    /// <param name="enumerable">An Enumerable of type T</param>
+    /// <param name="separator">A string separator for each element</param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns>A string represent a list of separated elements</returns>
+    public static string ToJoinString<T>(this IEnumerable<T>? enumerable, string separator = ",") => 
+        enumerable is not null ? string.Join(separator, enumerable): string.Empty;
 }
