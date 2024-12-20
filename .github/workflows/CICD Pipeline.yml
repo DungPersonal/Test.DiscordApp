@@ -48,6 +48,7 @@ jobs:
 
   notify-end:
     needs: Full-CI-Pipeline
+    if: ${{ always() }}
     uses: DungPersonal/Test.DevOps/.github/workflows/notify_discord.yml@main
     with:
       status: ${{ needs.Full-CI-Pipeline.result }}
